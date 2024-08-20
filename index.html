@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-100 p-2" x-data="{ showModal: false }">
+<body class="bg-gray-100 p-2" x-data="scheduler()">
     <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <!-- Previous scheduler code here -->
         
@@ -26,14 +26,25 @@
                     <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
                         <div>
                             <span x-text="subject.name"></span>
-                            <span x-text="formatTimes(subject.times)" class="text-sm text-gray-600 ml-2"></span>
+                            <span x-text="formatTimesWithDayList(subject.times)" class="text-sm text-gray-600 ml-2"></span>
                         </div>
                         <button @click="editSubject(index)" class="text-blue-500 hover:text-blue-700">
                             Edit
                         </button>
+
+                        <button @click="deleteSubject(index)" class="text-red-500 hover:text-red-700">
+                            Delete
+                        </button>
                     </div>
                 </template>
             </div>
+        </div>
+
+        <!-- Optimize -->
+        <div class="p-4">
+            <button @click="optimize" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Optimize Schedule
+            </button>
         </div>
     </div>
 
@@ -337,20 +348,32 @@
                 <h3 class="text-lg leading-6 font-medium text-gray-900" x-text="editIndex === null ? 'Add Subject' : 'Edit Subject'"></h3>
                 <div class="mt-2 px-7 py-3">
                     <input x-model="subjectName" type="text" placeholder="Subject Name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700">Available Times</label>
-                        <div class="flex mt-1">
+                    <div class="flex flex-col mt-1 space-y-2">
+                        <select x-model="selectedDay" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="">Select Day</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                            <option>Sunday</option>
+                        </select>
+                        <div class="flex">
                             <input x-model="startTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             <span class="mx-2 self-center">to</span>
                             <input x-model="endTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         </div>
-                        <button @click="addTimeSpan" class="mt-2 bg-blue-500 text-white px-2 py-1 rounded text-sm">Add Time Span</button>
                     </div>
+                    <button @click="addTimeSpan" class="mt-2 bg-blue-500 text-white px-2 py-1 rounded text-sm">Add Time Span</button>
                     <div class="mt-4">
                         <h4 class="text-sm font-medium text-gray-700">Added Time Spans:</h4>
                         <ul class="list-disc list-inside">
                             <template x-for="(time, index) in times" :key="index">
-                                <li x-text="formatTimeSpan(time)" class="text-sm"></li>
+                                <li class="flex items-center justify-between">
+                                    <span x-text="formatTimesWithDay(time)" class="text-sm"></span>
+                                    <button @click="deleteTimeSpan(index)" class="text-red-500 hover:text-red-700 text-sm">Delete</button>
+                                </li>
                             </template>
                         </ul>
                     </div>
@@ -366,69 +389,6 @@
             </div>
         </div>
     </div>
-    <script>
-        function scheduler() {
-            return {
-                showModal: false,
-                subjectName: '',
-                startTime: '',
-                endTime: '',
-                times: [],
-                subjects: [],
-                editIndex: null,
-
-                addTimeSpan() {
-                    if (this.startTime && this.endTime) {
-                        this.times.push({ start: this.startTime, end: this.endTime });
-                        this.startTime = '';
-                        this.endTime = '';
-                    }
-                },
-
-                formatTimeSpan(time) {
-                    return `${time.start} - ${time.end}`;
-                },
-
-                saveSubject() {
-                    if (this.subjectName && this.times.length > 0) {
-                        const subject = {
-                            name: this.subjectName,
-                            times: [...this.times]
-                        };
-
-                        if (this.editIndex !== null) {
-                            this.subjects[this.editIndex] = subject;
-                            this.editIndex = null;
-                        } else {
-                            this.subjects.push(subject);
-                        }
-
-                        this.resetForm();
-                        this.showModal = false;
-                    }
-                },
-
-                editSubject(index) {
-                    this.editIndex = index;
-                    const subject = this.subjects[index];
-                    this.subjectName = subject.name;
-                    this.times = [...subject.times];
-                    this.showModal = true;
-                },
-
-                resetForm() {
-                    this.subjectName = '';
-                    this.startTime = '';
-                    this.endTime = '';
-                    this.times = [];
-                    this.editIndex = null;
-                },
-
-                formatTimes(times) {
-                    return times.map(time => `${time.start}-${time.end}`).join(', ');
-                }
-            }
-        }
-    </script>
+    <script src="scheduler.js"></script>
 </body>
 </html>
