@@ -5,11 +5,430 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tailwind Border Example</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="flex justify-center items-center h-screen bg-gray-100">
-    <div class="border-4 border-black p-4">
-        <h1 class="text-2xl font-bold">Hello, Tailwind!</h1>
-        <p class="mt-2">This div has a black border with padding.</p>
+<body class="bg-gray-100 p-8" x-data="{ showModal: false }">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Previous scheduler code here -->
+        
+        <!-- Add Subject Button -->
+        <div class="p-4">
+            <button @click="showModal = true" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Add Subject
+            </button>
+        </div>
+
+        <!-- Added Subjects List -->
+        <div class="p-4">
+            <h2 class="text-xl font-bold mb-4">Added Subjects</h2>
+            <div class="space-y-2">
+                <template x-for="(subject, index) in subjects" :key="index">
+                    <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
+                        <div>
+                            <span x-text="subject.name"></span>
+                            <span x-text="formatTimes(subject.times)" class="text-sm text-gray-600 ml-2"></span>
+                        </div>
+                        <button @click="editSubject(index)" class="text-blue-500 hover:text-blue-700">
+                            Edit
+                        </button>
+                    </div>
+                </template>
+            </div>
+        </div>
     </div>
+
+
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden" >
+        <div class="flex">
+            <div class="w-24 bg-gray-200"></div>
+            <div class="flex-1 grid grid-cols-7">
+                <div class="text-center py-2 font-semibold">Mon</div>
+                <div class="text-center py-2 font-semibold">Tue</div>
+                <div class="text-center py-2 font-semibold">Wed</div>
+                <div class="text-center py-2 font-semibold">Thu</div>
+                <div class="text-center py-2 font-semibold">Fri</div>
+                <div class="text-center py-2 font-semibold">Sat</div>
+                <div class="text-center py-2 font-semibold">Sun</div>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="w-24 bg-gray-200">
+                <!-- Time labels -->
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:30 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:30 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">9:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">9:30 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">10:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">10:30 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">11:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">11:30 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">12:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">12:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">1:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">1:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">2:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">2:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">3:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">3:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">4:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">4:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">5:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">5:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">6:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">6:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:30 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">9:00 PM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">9:30 PM</div>
+            </div>
+            <div class="flex-1 grid grid-cols-7">
+                <!-- Time slots -->
+                <div class="border-t border-l" id="monSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="tueSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="wedSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="thuSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="friSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="satSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+
+                <div class="border-t border-l" id="sunSlot">
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <div class="h-12 border-b hover:shadow-inner cursor-pointer"></div>
+                    <!-- Repeat for all 30-minute slots from 7 AM to 10 PM -->
+                </div>
+                <!-- Repeat for all 7 days of the week -->
+            </div>
+        </div>
+
+    </div>    
+
+    <!-- Modal -->
+    <div x-show="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" x-cloak>
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900" x-text="editIndex === null ? 'Add Subject' : 'Edit Subject'"></h3>
+                <div class="mt-2 px-7 py-3">
+                    <input x-model="subjectName" type="text" placeholder="Subject Name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700">Available Times</label>
+                        <div class="flex mt-1">
+                            <input x-model="startTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="mx-2 self-center">to</span>
+                            <input x-model="endTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <button @click="addTimeSpan" class="mt-2 bg-blue-500 text-white px-2 py-1 rounded text-sm">Add Time Span</button>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700">Added Time Spans:</h4>
+                        <ul class="list-disc list-inside">
+                            <template x-for="(time, index) in times" :key="index">
+                                <li x-text="formatTimeSpan(time)" class="text-sm"></li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button @click="saveSubject" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        Save
+                    </button>
+                    <button @click="showModal = false; resetForm()" class="mt-3 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function scheduler() {
+            return {
+                showModal: false,
+                subjectName: '',
+                startTime: '',
+                endTime: '',
+                times: [],
+                subjects: [],
+                editIndex: null,
+
+                addTimeSpan() {
+                    if (this.startTime && this.endTime) {
+                        this.times.push({ start: this.startTime, end: this.endTime });
+                        this.startTime = '';
+                        this.endTime = '';
+                    }
+                },
+
+                formatTimeSpan(time) {
+                    return `${time.start} - ${time.end}`;
+                },
+
+                saveSubject() {
+                    if (this.subjectName && this.times.length > 0) {
+                        const subject = {
+                            name: this.subjectName,
+                            times: [...this.times]
+                        };
+
+                        if (this.editIndex !== null) {
+                            this.subjects[this.editIndex] = subject;
+                            this.editIndex = null;
+                        } else {
+                            this.subjects.push(subject);
+                        }
+
+                        this.resetForm();
+                        this.showModal = false;
+                    }
+                },
+
+                editSubject(index) {
+                    this.editIndex = index;
+                    const subject = this.subjects[index];
+                    this.subjectName = subject.name;
+                    this.times = [...subject.times];
+                    this.showModal = true;
+                },
+
+                resetForm() {
+                    this.subjectName = '';
+                    this.startTime = '';
+                    this.endTime = '';
+                    this.times = [];
+                    this.editIndex = null;
+                },
+
+                formatTimes(times) {
+                    return times.map(time => `${time.start}-${time.end}`).join(', ');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
