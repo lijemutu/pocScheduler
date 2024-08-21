@@ -23,21 +23,47 @@ function scheduler() {
         },
 
         saveSubject() {
+            // Check if subject name and at least one time span is provided
             if (this.subjectName && this.times.length > 0) {
-                const subject = {
-                    name: this.subjectName,
-                    times: [...this.times]
-                };
+                // Validate time spans
+                const isValid = this.times.every(time => {
+                    const startHour = parseInt(time.start.split(':')[0]);
+                    const startMinute = parseInt(time.start.split(':')[1]);
+                    const endHour = parseInt(time.end.split(':')[0]);
+                    const endMinute = parseInt(time.end.split(':')[1]);
 
-                if (this.editIndex !== null) {
-                    this.subjects[this.editIndex] = subject;
-                    this.editIndex = null;
-                } else {
-                    this.subjects.push(subject);
+                    // Check if start and end time are within the required hours (7 AM to 9:30 PM)
+                    if (
+                        (startHour < 7 || endHour < 7) ||
+                        (startHour > 21 || endHour > 21) ||
+                        (endHour === 21 && endMinute > 30)
+                    ) {
+                        alert(`Time span from ${time.start} to ${time.end} is outside the required hours (7 AM to 9:30 PM).`);
+                        this.resetForm();
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                // If all time spans are valid, create the subject and add it to the subjects array
+                if (isValid) {
+                    const subject = {
+                        name: this.subjectName,
+                        times: [...this.times],
+                        matrix: this.generateMatrix(this.times)
+                    };
+
+                    if (this.editIndex !== null) {
+                        this.subjects[this.editIndex] = subject;
+                        this.editIndex = null;
+                    } else {
+                        this.subjects.push(subject);
+                    }
+
+                    this.resetForm();
+                    this.showModal = false;
                 }
-
-                this.resetForm();
-                this.showModal = false;
             }
         },
 
@@ -75,8 +101,104 @@ function scheduler() {
             this.times.splice(index, 1);
         },
 
-        optimize() {
+        generateMatrix(times) {
+            const matrix = Array.from({ length: 30 }, () => Array(7).fill(0));
 
-        }
+            times.forEach(time => {
+                const startHour = parseInt(time.start.split(':')[0]);
+                const startMinute = parseInt(time.start.split(':')[1]);
+                const endHour = parseInt(time.end.split(':')[0]);
+                const endMinute = parseInt(time.end.split(':')[1]);
+
+                const startIndex = this.getTimeSlotIndex(startHour, startMinute);
+                const endIndex = this.getTimeSlotIndex(endHour, endMinute);
+
+                const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(time.day);
+
+                for (let i = startIndex; i <= endIndex; i++) {
+                    matrix[i][dayIndex] = 1;
+                }
+            });
+
+            return matrix;
+        },
+
+        getTimeSlotIndex(hour, minute) {
+            const totalMinutes = (hour - 7) * 60 + minute;
+            return Math.floor(totalMinutes / 30);
+        },
+
+        optimize() {
+            const uniqueSubjectNames = [...new Set(this.subjects.map(subject => subject.name))];
+            const subjectMatrices = {};
+
+            // Group matrices by subject name
+            for (const subject of this.subjects) {
+                if (!subjectMatrices[subject.name]) {
+                    subjectMatrices[subject.name] = [];
+                }
+                subjectMatrices[subject.name].push(subject.matrix);
+            }
+
+            // Generate all sum combinations of different subject matrices
+            const validMatrices = this.generateCombinations(subjectMatrices);
+
+            return validMatrices;
+        },
+
+        generateCombinations(subjectMatrices) {
+            const uniqueSubjectNames = Object.keys(subjectMatrices);
+            const validCombinations  = [];
+        
+            // Recursively generate all combinations
+            this.backtrack(uniqueSubjectNames, 0, Array(30).fill().map(() => Array(7).fill(0)), [], validCombinations, subjectMatrices);
+
+            return validMatrices;
+        },
+
+        backtrack(subjectNames, index, currentMatrix, currentIndexes, validCombinations, subjectMatrices) {
+            if (index === subjectNames.length) {
+                if (this.isValidMatrix(currentMatrix)) {
+                    validCombinations.push({
+                        matrix: currentMatrix.map(row => [...row]),
+                        indexes: [...currentIndexes]
+                    });
+                }
+                return;
+            }
+        
+            const currentSubjectName = subjectNames[index];
+            const currentSubjectMatrices = subjectMatrices[currentSubjectName];
+        
+            for (let i = 0; i < currentSubjectMatrices.length; i++) {
+                const matrix = currentSubjectMatrices[i];
+                for (let row = 0; row < 30; row++) {
+                    for (let col = 0; col < 7; col++) {
+                        currentMatrix[row][col] += matrix[row][col];
+                    }
+                }
+                currentIndexes.push(i);
+                
+                this.backtrack(subjectNames, index + 1, currentMatrix, currentIndexes, validCombinations, subjectMatrices);
+                
+                currentIndexes.pop();
+                for (let row = 0; row < 30; row++) {
+                    for (let col = 0; col < 7; col++) {
+                        currentMatrix[row][col] -= matrix[row][col];
+                    }
+                }
+            }
+        },
+
+        isValidMatrix(matrix) {
+            for (let i = 0; i < 30; i++) {
+                for (let j = 0; j < 7; j++) {
+                    if (matrix[i][j] > 1) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        },
     }
 }

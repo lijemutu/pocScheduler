@@ -360,9 +360,9 @@
                             <option>Sunday</option>
                         </select>
                         <div class="flex">
-                            <input x-model="startTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input x-model="startTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" min="07:00" max="21:30" placeholder="hour">
                             <span class="mx-2 self-center">to</span>
-                            <input x-model="endTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input x-model="endTime" type="time" class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" min="07:00" max="21:30" placeholder="hour">
                         </div>
                     </div>
                     <button @click="addTimeSpan" class="mt-2 bg-blue-500 text-white px-2 py-1 rounded text-sm">Add Time Span</button>
