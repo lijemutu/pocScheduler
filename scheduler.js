@@ -8,6 +8,7 @@ function scheduler() {
         times: [],
         subjects: [],
         editIndex: null,
+        selectedSubjectIndexes: [],
 
         addTimeSpan() {
             if (this.selectedDay && this.startTime && this.endTime) {
@@ -129,31 +130,44 @@ function scheduler() {
         },
 
         optimize() {
-            const uniqueSubjectNames = [...new Set(this.subjects.map(subject => subject.name))];
+            // Clear previous selection
+            this.selectedSubjectIndexes = [];
             const subjectMatrices = {};
 
-            // Group matrices by subject name
-            for (const subject of this.subjects) {
+            // Group matrices by subject name and keep track of original indexes
+            this.subjects.forEach((subject, index) => {
                 if (!subjectMatrices[subject.name]) {
                     subjectMatrices[subject.name] = [];
                 }
-                subjectMatrices[subject.name].push(subject.matrix);
-            }
+                subjectMatrices[subject.name].push({ matrix: subject.matrix, originalIndex: index });
+            });
 
             // Generate all sum combinations of different subject matrices
-            const validMatrices = this.generateCombinations(subjectMatrices);
+            const validCombinations = this.generateCombinations(subjectMatrices);
 
-            return validMatrices;
+            if (validCombinations.length > 0) {
+                // Select a random combination
+                const randomIndex = Math.floor(Math.random() * validCombinations.length);
+                this.selectedSubjectIndexes = validCombinations[randomIndex].indexes;
+                this.selectedCombination = validCombinations[randomIndex].matrix;
+                
+                // Provide feedback about the number of valid combinations
+                alert(`Found ${validCombinations.length} valid combination(s). Displaying a random one.`);
+            } else {
+                alert('No valid combinations found. Try adjusting your schedule.');
+            }
+
+            return validCombinations;
         },
 
         generateCombinations(subjectMatrices) {
             const uniqueSubjectNames = Object.keys(subjectMatrices);
-            const validCombinations  = [];
-        
+            const validCombinations = [];
+
             // Recursively generate all combinations
             this.backtrack(uniqueSubjectNames, 0, Array(30).fill().map(() => Array(7).fill(0)), [], validCombinations, subjectMatrices);
 
-            return validMatrices;
+            return validCombinations;
         },
 
         backtrack(subjectNames, index, currentMatrix, currentIndexes, validCombinations, subjectMatrices) {
@@ -166,21 +180,21 @@ function scheduler() {
                 }
                 return;
             }
-        
+
             const currentSubjectName = subjectNames[index];
             const currentSubjectMatrices = subjectMatrices[currentSubjectName];
-        
+
             for (let i = 0; i < currentSubjectMatrices.length; i++) {
-                const matrix = currentSubjectMatrices[i];
+                const { matrix, originalIndex } = currentSubjectMatrices[i];
                 for (let row = 0; row < 30; row++) {
                     for (let col = 0; col < 7; col++) {
                         currentMatrix[row][col] += matrix[row][col];
                     }
                 }
-                currentIndexes.push(i);
-                
+                currentIndexes.push(originalIndex);
+
                 this.backtrack(subjectNames, index + 1, currentMatrix, currentIndexes, validCombinations, subjectMatrices);
-                
+
                 currentIndexes.pop();
                 for (let row = 0; row < 30; row++) {
                     for (let col = 0; col < 7; col++) {
@@ -199,6 +213,54 @@ function scheduler() {
                 }
             }
             return true;
+        },
+
+        getSlotClass(day, slotIndex) {
+            if (!this.selectedCombination) return '';
+            
+            const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day);
+            
+            if (this.selectedCombination[slotIndex][dayIndex] === 1) {
+                return 'bg-blue-200 text-center';
+            }
+            
+            return '';
+        },
+
+        getSlotTitle(day, slotIndex) {
+            if (!this.selectedCombination) return '';
+            
+            const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day);
+            
+            if (this.selectedCombination[slotIndex][dayIndex] === 1) {
+                const subject = this.getSubjectForSlot(dayIndex, slotIndex);
+                return subject ? subject.name : '';
+            }
+            
+            return '';
+        },
+
+        getSlotText(day, slotIndex) {
+            if (!this.selectedCombination) return '';
+            
+            const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day);
+            
+            if (this.selectedCombination[slotIndex][dayIndex] === 1) {
+                const subject = this.getSubjectForSlot(dayIndex, slotIndex);
+                return subject ? subject.name : '';
+            }
+            
+            return '';
+        },
+
+        getSubjectForSlot(dayIndex, slotIndex) {
+            for (let subjectIndex of this.selectedSubjectIndexes) {
+                const subject = this.subjects[subjectIndex];
+                if (subject.matrix[slotIndex][dayIndex] === 1) {
+                    return subject;
+                }
+            }
+            return null;
         },
     }
 }
