@@ -9,36 +9,37 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="bg-gray-100 p-2" x-data="scheduler()">
-    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+<body class="bg-zinc-200 dark:bg-zinc-500 p-2" x-data="scheduler()">
+    <div class="max-w-7xl mx-auto bg-zinc-100 dark:bg-zinc-700 rounded-lg shadow-lg overflow-hidden">
         <!-- Previous scheduler code here -->
 
         <!-- Add Subject Button -->
-        <div class="p-4">
-            <button @click="showModal = true" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <div class="p-4 text-center ">
+            <button @click="showModal = true" class="bg-zinc-200 dark:bg-zinc-700 text-zinc font-bold px-4 py-2 rounded hover:bg-zinc-300 dark:hover:bg-zinc-600 dark:border-2 dark:border-zinc-200 dark:text-zinc-200">
                 Add Subject
             </button>
+            <p class="text-sm dark:text-zinc-200">Add all your subjects</p>
         </div>
 
         <!-- Added Subjects List -->
-        <div class="p-4">
-            <h2 class="text-xl font-bold mb-4">Added Subjects</h2>
+        <div class="p-4 border-t-2">
+            <h2 class="text-xl font-bold mb-4 dark:text-zinc-200">Added Subjects</h2>
             <div class="space-y-2">
                 <template x-for="(subject, index) in subjects" :key="index">
-                    <div class="bg-gray-100 p-2 rounded"
-                        :class="{ 'border-2 border-black': selectedSubjectIndexes.includes(index) }">
+                    <div class="bg-gray-100 dark:bg-zinc-700 dark:border-2 dark:border-zinc-500 p-2 rounded"
+                        :class="{ 'border-4 border-zinc-300 dark:border-zinc-100 ': selectedSubjectIndexes.includes(index) }">
                         <div class="flex items-center justify-between">
-                            <span class="font-semibold" x-text="subject.name"></span>
+                            <span class="font-semibold dark:text-zinc-200" x-text="subject.name"></span>
                             <div>
-                                <button @click="editSubject(index)" class="text-blue-500 hover:text-blue-700 mr-2">
+                                <button @click="editSubject(index)" class=" mr-2 font-bold text-zinc hover:text-zinc-700 dark:text-zinc-200 hover:dark:text-zinc-100">
                                     Edit
                                 </button>
-                                <button @click="deleteSubject(index)" class="text-red-500 hover:text-red-700">
+                                <button @click="deleteSubject(index)" class="font-bold text-zinc hover:text-zinc-700 dark:text-zinc-200 hover:dark:text-zinc-100">
                                     Delete
                                 </button>
                             </div>
                         </div>
-                        <div class="mt-2 text-sm text-gray-600" x-text="formatTimesWithDayList(subject.times)"></div>
+                        <div class="mt-1 text-sm text-gray-600 dark:text-zinc-200" x-text="formatTimesWithDayList(subject.times)"></div>
                         <!-- ... rest of the subject display ... -->
                     </div>
                 </template>
@@ -46,8 +47,8 @@
         </div>
 
         <!-- Optimize -->
-        <div class="p-4">
-            <button @click="optimize" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <div class="p-4 text-center">
+            <button @click="optimize" class="bg-zinc-200 dark:bg-zinc-700 text-zinc font-bold px-4 py-2 rounded hover:bg-zinc-300 dark:hover:bg-zinc-600 dark:border-2 dark:border-zinc-200 dark:text-zinc-200">
                 Optimize Schedule
             </button>
         </div>
@@ -68,9 +69,9 @@
             </div>
         </div>
         <div class="flex">
-            <div class="w-24 bg-gray-200">
+            <div class="w-24 bg-gray-200 ">
                 <!-- Time labels -->
-                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:00 AM</div>
+                <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600 ">7:00 AM</div>
                 <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:30 AM</div>
                 <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:00 AM</div>
                 <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">8:30 AM</div>
