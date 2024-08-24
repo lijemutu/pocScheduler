@@ -221,7 +221,7 @@ function scheduler() {
             const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day);
             
             if (this.selectedCombination[slotIndex][dayIndex] === 1) {
-                return 'bg-blue-200 text-center';
+                return 'bg-zinc-400 text-center';
             }
             
             return '';

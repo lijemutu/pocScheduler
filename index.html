@@ -57,7 +57,7 @@
 
     <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="flex">
-            <div class="w-24 bg-gray-200"></div>
+            <div class="w-20 bg-gray-200"></div>
             <div class="flex-1 grid grid-cols-7">
                 <div class="text-center py-2 font-semibold">Mon</div>
                 <div class="text-center py-2 font-semibold">Tue</div>
@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="flex">
-            <div class="w-24 bg-gray-200 ">
+            <div class="w-20 bg-gray-200 ">
                 <!-- Time labels -->
                 <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600 ">7:00 AM</div>
                 <div class="h-12 text-right pr-2 pt-2 text-sm text-gray-600">7:30 AM</div>
@@ -115,7 +115,7 @@
                                 :class="getSlotClass(day, slotIndex - 1)"
                                 :title="getSlotTitle(day, slotIndex - 1)"
                             >
-                                <span x-text="getSlotText(day, slotIndex - 1)" class="text-md"></span>
+                                <span x-text="getSlotText(day, slotIndex - 1)" class="text-md text-zinc-100"></span>
                             </div>
                         </template>
                     </div>
@@ -127,16 +127,17 @@
 
     <!-- Modal -->
     <div x-show="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" x-cloak>
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-zinc-700">
             <div class="mt-3 text-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-900"
+                <h3 class="text-lg leading-6 font-bold text-zinc dark:text-zinc-200"
                     x-text="editIndex === null ? 'Add Subject' : 'Edit Subject'"></h3>
+                    <p class="text-sm text-zinc dark:text-zinc-200">For different subject options use same name</p>
                 <div class="mt-2 px-7 py-3">
                     <input x-model="subjectName" type="text" placeholder="Subject Name"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-zinc-700 dark:border-2 dark:border-zinc-200 p-1 dark:text-zinc-400">
                     <div class="flex flex-col mt-1 space-y-2">
                         <select x-model="selectedDay"
-                            class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-zinc-700 dark:border-2 dark:border-zinc-200 p-1 dark:text-zinc-400 mt-2">
                             <option value="">Select Day</option>
                             <option>Monday</option>
                             <option>Tuesday</option>
@@ -148,24 +149,24 @@
                         </select>
                         <div class="flex">
                             <input x-model="startTime" type="time"
-                                class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-zinc-700 dark:border-2 dark:border-zinc-200 p-1 dark:text-zinc-200"
                                 min="07:00" max="21:30" placeholder="hour">
-                            <span class="mx-2 self-center">to</span>
+                            <span class="mx-2 self-center dark:text-zinc-200">to</span>
                             <input x-model="endTime" type="time"
-                                class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-zinc-700 dark:border-2 dark:border-zinc-200 p-1 dark:text-zinc-200"
                                 min="07:00" max="21:30" placeholder="hour">
                         </div>
                     </div>
-                    <button @click="addTimeSpan" class="mt-2 bg-blue-500 text-white px-2 py-1 rounded text-sm">Add Time
+                    <button @click="addTimeSpan" class="mt-4 bg-zinc-400 hover:bg-zinc-500 text-white px-2 py-1 rounded text-sm">Add Time
                         Span</button>
                     <div class="mt-4">
-                        <h4 class="text-sm font-medium text-gray-700">Added Time Spans:</h4>
+                        <h4 class="text-sm font-medium text-zinc-700">Added Time Spans:</h4>
                         <ul class="list-disc list-inside">
                             <template x-for="(time, index) in times" :key="index">
                                 <li class="flex items-center justify-between">
-                                    <span x-text="formatTimesWithDay(time)" class="text-sm"></span>
+                                    <span x-text="formatTimesWithDay(time)" class="text-md dark:text-zinc-200"></span>
                                     <button @click="deleteTimeSpan(index)"
-                                        class="text-red-500 hover:text-red-700 text-sm">Delete</button>
+                                        class="text-red-500 hover:text-red-700 text-md dark:text-zinc-200 font-bold">Delete</button>
                                 </li>
                             </template>
                         </ul>
@@ -173,11 +174,11 @@
                 </div>
                 <div class="items-center px-4 py-3">
                     <button @click="saveSubject"
-                        class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        class="px-4 py-2 bg-zinc-400 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-300">
                         Save
                     </button>
                     <button @click="showModal = false; resetForm()"
-                        class="mt-3 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        class="mt-3 px-4 py-2 bg-zinc-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-zinc-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Close
                     </button>
                 </div>
